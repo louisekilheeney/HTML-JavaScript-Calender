@@ -1,0 +1,161 @@
+<!DOCTYPEhtml>
+<html>
+<head>
+<script>
+function is_leap(year) {
+    if(year%4==0) return 1;
+	if(year%400==0) return 1;
+    if(year%100==0) return 0;
+}
+function getYear() {
+	var txt = document.getElementById("txtYear").value;
+	var year = parseInt(txt);
+	if (isNaN(year))
+		alert(txt + " is not a number!");
+	//else if (is_leap(year)==1)
+		//alert(year + " is a leap year");
+	//else
+		//alert(year + " is not a leap year");
+	return year;
+}
+
+function get_no_of_days(year, month){
+	console.log(month);
+	if (month == 8 || month == 3 || month == 5 || month == 10)
+		return 30;
+	if (month != 1) // February index is 1 in the selMonth
+		return 31;
+	return (28 + is_leap(year));
+}
+
+function getMonth() {
+	var oSelMonth = document.getElementById("selMonth");
+	var idx = oSelMonth.selectedIndex;
+   // alert("You chose month "+(idx+1));
+	return idx;
+}
+		
+function first_day(year, month) {
+var daynumber = new_years_day(year); 
+		for (var i=1; i<month; i++) 
+		daynumber+=no_of_days(year, i); 
+		daynumber %= 7;
+	return daynumber;
+}
+		
+function new_years_day(year) {
+	var daynumber = 1;
+	for (var i=1900; i<year; i++){
+		daynumber+=365+is_leap(i); 
+	}
+	return (daynumber % 7); 
+}
+
+function createCalendar(){
+	var htmlContent ="<tr>";
+	var counter = 0;
+	var weekdays2 = 0;
+	var weekdays= 7;
+	var checkMonth = getMonth();
+	var year = getYear();
+	var no_of_days  = get_no_of_days(year, checkMonth);
+	var monthNames = ["January","February","March","April","May","June","July","August","September","October","November", "December"];
+		
+	if (isNaN(no_of_days)){
+		alert(no_of_days+" is not a number!");
+		}
+	if(isNaN(checkMonth)){
+			alert(checkMonth+" is not a number!");
+		}
+	else {
+		console.log("worked");
+	}
+	
+	var i = 0; 
+	while( i < checkMonth){
+		htmlContent += "<td class='daynumber' this.style.color=\"#33AAFF\"></td>";
+		i++;
+	}
+	var d = new Date();
+	var day = d.getDate() -1;
+	
+	console.log("day = " + day);
+	while (counter < no_of_days){
+
+		if (i % 7 == 0 ){
+			if (counter == day){
+				htmlContent += "</tr><tr><td class='daynumber2' this.style.color=\"#33AAFF\">"+(counter+1)+"</td>";
+			}
+			else{
+				htmlContent += "</tr><tr><td class='daynumber' this.style.color=\"#4286f4\">"+(counter+1)+"</td>";
+			}
+		}
+		else{
+			if (counter == day){
+				htmlContent += "<td class='daynumber2' this.style.color=\"#33AAFF\">"+(counter+1)+"</td>";
+			}
+			else{
+				htmlContent += "<td class='daynumber' this.style.color=\"#4286f4\">"+(counter+1)+"</td>";
+			}
+		}
+		counter++;
+		i++;
+	}
+	while(i % 7 != 0 ){
+		htmlContent += "<td class='daynumber' this.style.color=\"#33AAFF\"></td>";
+		i++;
+	}
+	
+	htmlContent +="</tr>";
+	var calendarBody = "<table class='calendar'> <tr class='monthNow'><th colspan='7'>"
+	+monthNames[checkMonth]+" "+ year +"</th></tr>";
+	calendarBody +="<tr class='dayNames'>  <td>Sunday</td>  <td>Monday</td> <td>Tuesday</td>"+
+		"<td>Wednesday</td> <td>Thursday</td> <td>Friday</td> <td>Saturday</td> </tr>";
+	calendarBody += "<tr>";
+	calendarBody += htmlContent;
+	calendarBody += "</tr></table>";
+	document.getElementById("calendar").innerHTML=calendarBody;
+}
+
+</script>
+</head>
+<body>
+Pick a Month: 
+<select id='selMonth'>
+	<option value='1'>January</option>
+	<option value='2'>February</option>
+	<option value='3'>March</option>
+	<option value='4'>April</option>
+	<option value='5'>May</option>
+	<option value='6'>June</option>
+	<option value='7'>July</option>
+	<option value='8'>August</option>
+	<option value='9'>September</option>
+	<option value='10'>October</option>
+	<option value='11'>November</option>
+	<option value='12'>December</option>
+</select>
+<br> <br>
+Enter a Year:
+<input id='txtYear'><br><br>
+<button onclick='createCalendar();'>Create a Calendar</button>
+<div id="calendar"></div> 
+<style>
+table th, td
+ {
+	height: 15px;
+    border: 2px solid black;
+	 background: #33AAFF;
+}
+.daynumber{
+ background: #0066cc;
+ text-align: center;
+}
+.daynumber2{
+ background: #33AAFF;
+ text-align: center;
+}
+</style>
+</body>
+
+<html>
